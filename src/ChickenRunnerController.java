@@ -24,6 +24,9 @@ public class ChickenRunnerController {
 		this.view.addPanel(new Panel());
 		this.view.setVisible(true);
 		
+		this.model.getBgPoint2().x = this.view.getBg2().getWidth(null);
+		this.model.getBgPoint2().y = 0;
+		
 		this.model.setTimer(new Timer(5, new SideScroller()));
 		this.model.getTimer().start();
 	}
@@ -33,6 +36,7 @@ public class ChickenRunnerController {
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			g.drawImage(view.getBg1(), model.getBgPoint1().x , model.getBgPoint1().y, view.getBg1().getWidth(null), view.getBg1().getHeight(null), null);
+			g.drawImage(view.getBg2(), model.getBgPoint2().x , model.getBgPoint2().y, view.getBg2().getWidth(null), view.getBg1().getHeight(null), null);
 		}
 	}
 	
@@ -40,10 +44,25 @@ public class ChickenRunnerController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			moveBackground();
 			view.repaint();
 		}
 		
 	}
 	
+	public void moveBackground() {
+		model.getBgPoint1().x -= 1;
+		model.getBgPoint2().x -= 1;
+		
 
+		if (model.getBgPoint1().x <= view.getBg1().getWidth(null) * -1) {
+			model.getBgPoint1().x = view.getBg1().getWidth(null);
+			
+		} else if (model.getBgPoint2().x <= view.getBg2().getWidth(null) * -1) {
+			model.getBgPoint2().x = view.getBg2().getWidth(null);
+		}
+	}
+
+
+	
 }
