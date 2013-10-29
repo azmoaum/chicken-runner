@@ -9,14 +9,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class ChickenRunnerView extends JFrame {
-	private BufferedImage bg1, bg2;
+	private BufferedImage bg1, bg2, chickenImage;
 	
 	public ChickenRunnerView() {
 		this.bg1 = null;
 		this.bg2 = null;
+		this.chickenImage = null;
 		try {
 		    this.bg1 = ImageIO.read(new File("images/Background.png"));
 		    this.bg2 = ImageIO.read(new File("images/Background.png"));
+		    this.chickenImage = ImageIO.read(new File("images/Chicken.png"));
 		} catch (IOException e) {
 		}
 		
@@ -28,6 +30,10 @@ public class ChickenRunnerView extends JFrame {
 	
 	public Image getBg2() {
 		return this.bg2;
+	}
+	
+	public Image getChickenImage() {
+		return this.chickenImage;
 	}
 	
 	public void addPanel(JPanel p) {
