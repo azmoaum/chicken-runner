@@ -1,38 +1,27 @@
 import java.awt.Point;
 
-import javax.swing.Timer;
-
 public class Chicken {
+	private final int GRAVITY = 1;
+	private final int START_Y = 300;
+	private final int X_VELOCITY = 4;
+	private final int Y_VELOCITY = 20;
+	
 	private Point location;
-	private Timer timer;
 	private boolean moveRight;
 	private boolean moveLeft;
 	private boolean moveUp;
-	private boolean moveDown;
-	private int dx;
-	private int dy;
-	
+	private int velY;
+	private int velX;
+
 	public Chicken() {
-		this.location = new Point(0, 300);
-		this.dx = 2;
-		this.dy = 2;
+		this.location = new Point(0, START_Y);
+		this.velX = X_VELOCITY;
+		this.velY = Y_VELOCITY;
 		this.moveRight = false;
 		this.moveLeft = false;
 		this.moveUp = false;
-		this.moveDown = false;
 	}
 	
-	public boolean isMoving() {
-		return this.moveRight || this.moveLeft || this.moveUp || this.moveDown;
-	}
-
-	public void setMoving(boolean moving) {
-		this.moveRight = false;
-		this.moveLeft = false;
-		this.moveUp = false;
-		this.moveDown = false;
-	}
-
 	public boolean isMoveRight() {
 		return moveRight;
 	}
@@ -57,47 +46,25 @@ public class Chicken {
 		this.moveUp = moveUp;
 	}
 
-	public boolean isMoveDown() {
-		return moveDown;
-	}
-
-	public void setMoveDown(boolean moveDown) {
-		this.moveDown = moveDown;
-	}
-	
 	public Point getPoint() {
 		return this.location;
 	}
 	
 	public void moveLeft() {
-		this.location.x -= dx;
+		this.location.x -= velX;
 	}
 	
 	public void moveRight() {
-		this.location.x += dx;
+		this.location.x += velX;
 	}
 	
 	public void moveUp() {
-		this.location.y -= dy;
-	}
-	
-	public void moveDown() {
-		this.location.y += dy;
-	}
-	
-	public int getDx() {
-		return this.dx;
-	}
-	
-	public int getDy() {
-		return this.dy;
-	}
-	
-	public Timer getTimer() {
-		return this.timer;
-	}
-	
-	public void setTimer(Timer timer) {
-		this.timer = timer;
+		if (this.velY >= -Y_VELOCITY) {
+			this.location.y -= velY;
+			this.velY -= GRAVITY;
+		} else {
+			this.moveUp = false;
+			this.velY = Y_VELOCITY;
+		}
 	}
 }
