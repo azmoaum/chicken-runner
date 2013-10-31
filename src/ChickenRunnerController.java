@@ -1,10 +1,10 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -30,8 +30,11 @@ public class ChickenRunnerController {
 		this.model.setTimer(new Timer(15, new ChickenTimer()));
 		this.view.addKeyListener(new ChickenKeyListener());
 		
-		this.model.setAppleTimer(new Timer(8000, new AppleSpawner()));
+		this.model.setAppleTimer(new Timer(2000, new AppleSpawner()));
 		this.model.getAppleTimer().start();
+		
+		this.model.setMissleTimer(new Timer(5, new MissleMover()));
+		this.model.getMissleTimer().start();
 		
 		this.model.getTimer().start();
 	}
@@ -45,12 +48,16 @@ public class ChickenRunnerController {
 			g.drawImage(view.getBg1(), model.getBgPoint1().x , model.getBgPoint1().y, view.getBg1().getWidth(null), view.getBg1().getHeight(null), null);
 			g.drawImage(view.getBg2(), model.getBgPoint2().x , model.getBgPoint2().y, view.getBg2().getWidth(null), view.getBg1().getHeight(null), null);
 			
-			if (!model.getApple().isEaten()) {
-				g.drawImage(view.getAppleImage(), model.getApple().getPoint().x , model.getApple().getPoint().y, view.getAppleImage().getWidth(null), view.getAppleImage().getHeight(null), null);
+			for (Apple apple: model.getApples()) {
+				g.drawImage(view.getAppleImage(), apple.getPoint().x , apple.getPoint().y, view.getAppleImage().getWidth(null), view.getAppleImage().getHeight(null), null);
 			}
 			
 			g.drawImage(view.getCurrChickenImage(), model.getChicken().getPoint().x, model.getChicken().getPoint().y, view.getChickenImage().getWidth(null), view.getChickenImage().getHeight(null), null);
-		
+			
+			for (Missle missle: model.getMissles()) {
+				g.setColor(Color.WHITE);
+				g.fillOval(missle.getPoint().x, missle.getPoint().y, missle.getMissleLength(), missle.getMissleLength());
+			}
 		}
 	}
 	
@@ -60,11 +67,7 @@ public class ChickenRunnerController {
 		public void actionPerformed(ActionEvent e) {
 			moveBackground();
 			moveChicken();
-
-			if (!model.getApple().isEaten()) {
-				model.getApple().moveLeft();
-				checkAppleChickenCollision();
-			}
+			moveApple();
 			
 			view.repaint();
 		}
@@ -72,20 +75,29 @@ public class ChickenRunnerController {
 	}
 	
 	class ChickenKeyListener implements KeyListener {
-
+		//If you hold down a key. execute once [Pause] then execute repeatedly.
+		//This boolean prevents repeating.
+		boolean alreadyPressed = false;
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int keyCode = e.getKeyCode();
-			
+
 			switch (keyCode) { 
         		case KeyEvent.VK_UP:
         			model.getChicken().setMoveUp(true);
+        			System.out.println(model.getApples().size());
         			break;
         		case KeyEvent.VK_LEFT:
         			model.getChicken().setMoveLeft(true);
         			break;
-        		case KeyEvent.VK_RIGHT :
+        		case KeyEvent.VK_RIGHT:
         			model.getChicken().setMoveRight(true);
+        			break;
+        		case KeyEvent.VK_SPACE:
+        			if (!alreadyPressed) {
+        				fireMissle();
+        			}
+        			alreadyPressed = true;
         			break;
 			}
 		}
@@ -102,6 +114,9 @@ public class ChickenRunnerController {
         		case KeyEvent.VK_RIGHT :
         			model.getChicken().setMoveRight(false);
         			break;
+        		case KeyEvent.VK_SPACE:
+        			alreadyPressed = false;
+        			break;
 			}		
 		}
 
@@ -113,8 +128,17 @@ public class ChickenRunnerController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			model.getApple().spawn();
+			model.getApples().add(new Apple());
 		}
+	}
+	
+	class MissleMover implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			moveMissle();
+		}
+		
 	}
 	
 	public void moveBackground() {
@@ -144,15 +168,46 @@ public class ChickenRunnerController {
 		}
 	}
 	
-	public void checkAppleChickenCollision() {
-		int appleChickenDistanceX = Math.abs((model.getChicken().getPoint().x - model.getApple().getPoint().x));
-		
-		int appleWidth = view.getAppleImage().getWidth(null);
-		
-		if (model.getChicken().getPoint().y <= model.getApple().getPoint().y
-				&& appleChickenDistanceX < appleWidth) {
-			System.out.println("Apple eaten");
-			model.getApple().setEaten(true);
+	public void moveApple() {
+		for (Apple apple: model.getApples()) {
+			apple.moveLeft();
+			checkAppleChickenCollision();
 		}
+	}
+	
+	public void checkAppleChickenCollision() {
+		int index = 0;
+		//Not the greatest way to check collisions. But it is a GOOD approximation.
+		for (Apple apple: model.getApples()) {
+			int appleChickenDistanceX = Math.abs((model.getChicken().getPoint().x - apple.getPoint().x));
+			int appleChickenDistanceY = Math.abs((model.getChicken().getPoint().y - apple.getPoint().y));
+			int appleWidth = view.getAppleImage().getWidth(null);
+			int appleHeight = view.getAppleImage().getHeight(null);
+
+			if (appleChickenDistanceY <= appleHeight && appleChickenDistanceX < appleWidth) {
+				System.out.println("Apple eaten");
+				model.getApples().remove(index);
+			}
+			index++;
+		}
+	}
+	
+	public void moveMissle() {
+		for (Missle missle: model.getMissles()) {
+			missle.getPoint().x += missle.getXVelocity();
+		}
+		
+		if (!model.getMissles().isEmpty()) {
+			if (model.getMissles().getFirst().getPoint().x > model.getFrameWidth()) {
+				model.getMissles().removeFirst();
+			}
+		}
+	}
+	
+	public void fireMissle() {
+		int x = model.getChicken().getPoint().x + view.getChickenImage().getWidth(null);
+		int y = model.getChicken().getPoint().y + 30;
+
+		model.getMissles().addLast(new Missle(x, y));
 	}
 }
