@@ -1,43 +1,38 @@
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import javax.swing.Timer;
 
 public class ChickenRunnerModel {
+	private final int MAIN_TIMER_DELAY = 15;
 	private final int FRAME_WIDTH = 800;
 	private final int FRAME_HEIGHT = 400;
 	private final int BG_DX = 2;
+	private final int APPLE_SPAWN_DELAY = 1000;
+	private final int APPLE_SCORE_VALUE = 250;
+	private final int FONT_SIZE = 20;
+	private final int SCORE_X = 10;
+	private final int SCORE_Y = 20;
+	private final int MISSLE_Y_OFFSET = 30;
 	
-	private Timer Timer, appleTimer, missleTimer;
+	private int score;
+	private Timer Timer, appleTimer;
 	private Point bgPoint1, bgPoint2;
 	private Chicken chicken;
-	//private Apple apple;
-	private LinkedList<Missle> missles;
+	private CopyOnWriteArrayList<Missle> missles;
 	private CopyOnWriteArrayList<Apple> apples;
 	
 	public ChickenRunnerModel() {
+		this.score = 0;
 		this.Timer = new Timer(0, null);
 		this.appleTimer = new Timer(0, null);
 		this.bgPoint1 = new Point(0, 0);
 		this.bgPoint2 = new Point(0, 0);
 		this.chicken = new Chicken();
-		//this.apple = new Apple();
 		this.apples = new CopyOnWriteArrayList<Apple>();
-		this.missles = new LinkedList<Missle>();
+		this.missles = new CopyOnWriteArrayList<Missle>();
 		
 	}
-
-	public Timer getMissleTimer() {
-		return missleTimer;
-	}
-
-	public void setMissleTimer(Timer missleTimer) {
-		this.missleTimer = missleTimer;
-	}
-
+	
 	public Timer getTimer() {
 		return this.Timer;
 	}
@@ -78,15 +73,43 @@ public class ChickenRunnerModel {
 		return this.chicken;
 	}
 	
-	//public Apple getApple() {
-	//	return this.apple;
-	//}
-	
 	public CopyOnWriteArrayList<Apple> getApples() {
 		return this.apples;
 	}
 	
-	public LinkedList<Missle> getMissles() {
+	public CopyOnWriteArrayList<Missle> getMissles() {
 		return this.missles;
+	}
+	
+	public int getScore() {
+		return this.score;
+	}
+	
+	public void addAppleScore() {
+		this.score += APPLE_SCORE_VALUE;
+	}
+
+	public int getScoreX() {
+		return SCORE_X;
+	}
+	
+	public int getScoreY() {
+		return SCORE_Y;
+	}
+	
+	public int getFontSize() {
+		return FONT_SIZE;
+	}
+	
+	public int getAppleSpawnDelay() {
+		return APPLE_SPAWN_DELAY;
+	}
+	
+	public int getMainTimerDelay() {
+		return MAIN_TIMER_DELAY;
+	}
+	
+	public int getMissleYOffset() {
+		return MISSLE_Y_OFFSET;
 	}
 }

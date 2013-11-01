@@ -17,6 +17,7 @@ public class ChickenRunnerView extends JFrame {
 	public ChickenRunnerView() {
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setTitle("Andrew Zhao Chicken Runner");
+		this.setResizable(false);
 		
 		this.bg1 = null;
 		this.bg2 = null;
