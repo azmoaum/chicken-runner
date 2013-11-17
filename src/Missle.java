@@ -2,7 +2,7 @@ import java.awt.Point;
 
 public class Missle {
 	private final int X_VELOCITY = 10;
-	private final int MISSLE_LENGTH = 7;
+	private final int MISSLE_LENGTH = 20;
 	
 	private Point point;
 	

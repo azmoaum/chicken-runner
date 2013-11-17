@@ -2,6 +2,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -13,6 +14,8 @@ public class ChickenRunnerView extends JFrame {
 	private BufferedImage chickenImage, chickenImage2, chickenImage3;
 	private BufferedImage currChickenImage;
 	private BufferedImage appleImage;
+	private BufferedImage missleImage;
+	private BufferedImage enemyImage;
 	
 	public ChickenRunnerView() {
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -25,6 +28,8 @@ public class ChickenRunnerView extends JFrame {
 		this.chickenImage2 = null;
 		this.chickenImage3 = null;
 		this.appleImage = null;
+		this.missleImage = null;
+		this.enemyImage = null;
 		try {
 		    this.bg1 = ImageIO.read(new File("images/Background.png"));
 		    this.bg2 = ImageIO.read(new File("images/Background.png"));
@@ -32,6 +37,8 @@ public class ChickenRunnerView extends JFrame {
 		    this.chickenImage2 = ImageIO.read(new File("images/Chicken2.png"));
 		    this.chickenImage3 = ImageIO.read(new File("images/Chicken3.png"));
 		    this.appleImage = ImageIO.read(new File("images/Apple.png"));
+		    this.missleImage = ImageIO.read(new File("images/Missle.png"));
+		    this.enemyImage = ImageIO.read(new File("images/Enemy.png"));
 		} catch (IOException e) {
 		}
 		
@@ -72,6 +79,15 @@ public class ChickenRunnerView extends JFrame {
 	public Image getAppleImage() {
 		return this.appleImage;
 	}
+	
+	public Image getMissleImage() {
+		return this.missleImage;
+	}
+	
+	public Image getEnemyImage() {
+		return this.enemyImage;
+	}
+	
 	public void addPanel(JPanel p) {
 		this.add(p);
 	}

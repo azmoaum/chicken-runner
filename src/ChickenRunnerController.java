@@ -37,6 +37,9 @@ public class ChickenRunnerController {
 		this.model.setAppleTimer(new Timer(this.model.getAppleSpawnDelay(), new AppleSpawner()));
 		this.model.getAppleTimer().start();
 		
+		this.model.setEnemyTimer(new Timer(this.model.getEnemySpawnDelay(), new EnemySpawner()));
+		this.model.getEnemyTimer().start();
+		
 		this.model.getTimer().start();
 	}
 	
@@ -53,9 +56,10 @@ public class ChickenRunnerController {
 			
 			g.drawImage(view.getCurrChickenImage(), model.getChicken().getPoint().x, model.getChicken().getPoint().y, view.getChickenImage().getWidth(null), view.getChickenImage().getHeight(null), null);
 			
+			drawEnemy(g);
+			
 			for (Missle missle: model.getMissles()) {
-				g.setColor(Color.RED);
-				g.fillOval(missle.getPoint().x, missle.getPoint().y, missle.getMissleLength(), missle.getMissleLength());
+				g.drawImage(view.getMissleImage(), missle.getPoint().x, missle.getPoint().y, missle.getMissleLength(), missle.getMissleLength(), null);
 			}
 			
 			drawScore(g);
@@ -79,6 +83,12 @@ public class ChickenRunnerController {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
                    1.0f));
 		}
+		
+		public void drawEnemy(Graphics g) {
+			for (Enemy enemy: model.getEnemies()) {
+				g.drawImage(view.getEnemyImage(), enemy.getPoint().x , enemy.getPoint().y, view.getEnemyImage().getWidth(null), view.getEnemyImage().getHeight(null), null);
+			}
+		}
 	}
 	
 	class MainTimer implements ActionListener {
@@ -89,7 +99,7 @@ public class ChickenRunnerController {
 			moveChicken();
 			moveApple();
 			moveMissle();
-			
+			moveEnemy();
 			view.repaint();
 		}
 		
@@ -152,6 +162,15 @@ public class ChickenRunnerController {
 		}
 	}
 	
+	class EnemySpawner implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			model.getEnemies().add(new Enemy());
+		}
+		
+	}
+	
 	public void moveBackground() {
 		model.getBgPoint1().x -= model.getBgDx();
 		model.getBgPoint2().x -= model.getBgDx();
@@ -167,23 +186,23 @@ public class ChickenRunnerController {
 	
 	public void moveChicken() {
 		if (model.getChicken().isMoveRight()) {
-			view.switchCurrChickenImage();
-			
 			//Is the user attempting to move the chicken outside the right boundary?
 			if (model.getChicken().getPoint().x >= model.getFrameWidth() - view.getChickenImage().getWidth(null)) {
 				model.getChicken().setMoveRight(false);
 				return;
 			}
 			
-			model.getChicken().moveRight();
-		} else if (model.getChicken().isMoveLeft()) {
 			view.switchCurrChickenImage();
 			
+			model.getChicken().moveRight();
+		} else if (model.getChicken().isMoveLeft()) {
 			//Is the user attempting to move the chicken outside of the left boundary?
 			if (model.getChicken().getPoint().x <= 0) {
 				model.getChicken().setMoveLeft(false);
 				return;
 			}
+			
+			view.switchCurrChickenImage();
 			
 			model.getChicken().moveLeft();
 		}
@@ -201,7 +220,7 @@ public class ChickenRunnerController {
 			
 			if (apple.isEaten()) {
 				apple.getPoint().y -= 5;
-				apple.setAlpha(apple.getAlpha() - 0.05f);
+				apple.setAlpha(apple.getAlpha() - 0.04f);
 				if (apple.getAlpha() < 0) {
 					model.getApples().remove(index);
 				}
@@ -236,6 +255,20 @@ public class ChickenRunnerController {
 		}
 	}
 	
+	public void checkMissleEnemyCollision(Enemy enemy, int j) {
+		int i = 0;
+			for (Missle missle: model.getMissles()) {
+				int enemyMissleDistanceX = Math.abs(missle.getPoint().x - enemy.getPoint().x);
+				int enemyMissleDistanceY = Math.abs(missle.getPoint().y - enemy.getPoint().y);
+				
+				if (enemyMissleDistanceX <= 10 && enemyMissleDistanceY <= 50) {
+					model.getEnemies().remove(j);
+					model.getMissles().remove(i);
+				}
+				i++;
+			}
+	}
+	
 	public void moveMissle() {
 		for (Missle missle: model.getMissles()) {
 			missle.moveRight();
@@ -253,5 +286,21 @@ public class ChickenRunnerController {
 		int y = model.getChicken().getPoint().y + model.getMissleYOffset();
 
 		model.getMissles().add(new Missle(x, y));
+	}
+	
+	public void moveEnemy() {
+		int index = 0;
+		for (Enemy enemy: model.getEnemies()) {
+			enemy.moveLeft();
+			checkMissleEnemyCollision(enemy, index);
+			index++;
+		}
+		
+		if (!model.getEnemies().isEmpty()) {
+			if (model.getEnemies().get(0).getPoint().x < -1 * view.getEnemyImage().getWidth(null)) {
+				model.getEnemies().remove(0);
+			}
+		}
+		
 	}
 }

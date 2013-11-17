@@ -9,28 +9,31 @@ public class ChickenRunnerModel {
 	private final int BG_DX = 2;
 	private final int APPLE_SPAWN_DELAY = 1000;
 	private final int APPLE_SCORE_VALUE = 250;
+	private final int ENEMY_SPAWN_DELAY = 2000;
 	private final int FONT_SIZE = 20;
 	private final int SCORE_X = 10;
 	private final int SCORE_Y = 20;
 	private final int MISSLE_Y_OFFSET = 30;
 	
 	private int score;
-	private Timer Timer, appleTimer;
+	private Timer Timer, appleTimer, enemyTimer;
 	private Point bgPoint1, bgPoint2;
 	private Chicken chicken;
 	private CopyOnWriteArrayList<Missle> missles;
 	private CopyOnWriteArrayList<Apple> apples;
+	private CopyOnWriteArrayList<Enemy> enemies;
 	
 	public ChickenRunnerModel() {
 		this.score = 0;
 		this.Timer = new Timer(0, null);
 		this.appleTimer = new Timer(0, null);
+		this.enemyTimer = new Timer(0, null);
 		this.bgPoint1 = new Point(0, 0);
 		this.bgPoint2 = new Point(0, 0);
 		this.chicken = new Chicken();
 		this.apples = new CopyOnWriteArrayList<Apple>();
 		this.missles = new CopyOnWriteArrayList<Missle>();
-		
+		this.enemies = new CopyOnWriteArrayList<Enemy>();
 	}
 	
 	public Timer getTimer() {
@@ -49,6 +52,14 @@ public class ChickenRunnerModel {
 		return this.appleTimer;
 	}
 	
+	public Timer getEnemyTimer() {
+		return enemyTimer;
+	}
+
+	public void setEnemyTimer(Timer enemyTimer) {
+		this.enemyTimer = enemyTimer;
+	}
+
 	public Point getBgPoint1() {
 		return this.bgPoint1;
 	}
@@ -81,6 +92,10 @@ public class ChickenRunnerModel {
 		return this.missles;
 	}
 	
+	public CopyOnWriteArrayList<Enemy> getEnemies() {
+		return this.enemies;
+	}
+	
 	public int getScore() {
 		return this.score;
 	}
@@ -103,6 +118,10 @@ public class ChickenRunnerModel {
 	
 	public int getAppleSpawnDelay() {
 		return APPLE_SPAWN_DELAY;
+	}
+	
+	public int getEnemySpawnDelay() {
+		return ENEMY_SPAWN_DELAY;
 	}
 	
 	public int getMainTimerDelay() {
