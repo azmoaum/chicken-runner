@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,6 +22,9 @@ public class ChickenRunnerView extends JFrame {
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setTitle("Andrew Zhao Chicken Runner");
 		this.setResizable(false);
+		this.getContentPane().setPreferredSize(new Dimension(Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT));
+		this.pack();
+		this.setLocationRelativeTo(null);
 		
 		this.bg1 = null;
 		this.bg2 = null;
