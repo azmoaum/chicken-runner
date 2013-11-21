@@ -1,9 +1,6 @@
 import java.awt.Point;
 
 public class Missle {
-	private final int X_VELOCITY = 10;
-	private final int MISSLE_LENGTH = 20;
-	
 	private Point point;
 	
 	public Missle(int x, int y) {
@@ -11,11 +8,11 @@ public class Missle {
 	}
 	
 	public int getXVelocity() {
-		return X_VELOCITY;
+		return Constants.MISSLE_X_VELOCITY;
 	}
 	
 	public int getMissleLength() {
-		return MISSLE_LENGTH;
+		return Constants.MISSLE_LENGTH;
 	}
 
 	public Point getPoint() {
@@ -23,7 +20,7 @@ public class Missle {
 	}
 	
 	public void moveRight() {
-		this.point.x += X_VELOCITY;
+		this.point.x += Constants.MISSLE_X_VELOCITY;
 	}
 	
 }

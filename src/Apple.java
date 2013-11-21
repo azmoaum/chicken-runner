@@ -1,17 +1,13 @@
 import java.awt.Point;
 
 public class Apple {
-	private final int X_VELOCITY = 2;
-	private final int APPLE_START_Y = 125;
-	private final int APPLE_START_X = 800;
-
 	private Point point;
 	private boolean eaten;
 	private float alpha;
 	
 	public Apple() {
 		this.alpha = 1.0f;
-		this.point = new Point(APPLE_START_X, APPLE_START_Y);
+		this.point = new Point(Constants.APPLE_START_X, Constants.APPLE_START_Y);
 	}
 
 	public Point getPoint() {
@@ -19,7 +15,7 @@ public class Apple {
 	}
 
 	public void moveLeft() {
-		this.point.x -= X_VELOCITY;
+		this.point.x -= Constants.APPLE_X_VELOCITY;
 	}
 
 	public boolean isEaten() {
@@ -37,7 +33,5 @@ public class Apple {
 	public void setAlpha(float alpha) {
 		this.alpha = alpha;
 	}
-	
-	
 	
 }

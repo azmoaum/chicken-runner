@@ -25,19 +25,15 @@ public class ChickenRunnerController {
 		//Set location of second background image to be on right side of window.
 		this.model.getBgPoint2().x = this.view.getBg2().getWidth(null);
 		
-		this.view.getContentPane().setPreferredSize(new Dimension(this.model.getFrameWidth(), this.model.getFrameHeight()));
-		this.view.pack();
-		this.view.setLocationRelativeTo(null);
-		
 		this.view.addPanel(new Panel());
 		
-		this.model.setTimer(new Timer(this.model.getMainTimerDelay(), new MainTimer()));
+		this.model.setTimer(new Timer(Constants.MAIN_TIMER_DELAY, new MainTimer()));
 		this.view.addKeyListener(new ChickenKeyListener());
 		
-		this.model.setAppleTimer(new Timer(this.model.getAppleSpawnDelay(), new AppleSpawner()));
+		this.model.setAppleTimer(new Timer(Constants.APPLE_SPAWN_DELAY, new AppleSpawner()));
 		this.model.getAppleTimer().start();
 		
-		this.model.setEnemyTimer(new Timer(this.model.getEnemySpawnDelay(), new EnemySpawner()));
+		this.model.setEnemyTimer(new Timer(Constants.ENEMY_SPAWN_DELAY, new EnemySpawner()));
 		this.model.getEnemyTimer().start();
 		
 		this.model.getTimer().start();
@@ -68,9 +64,9 @@ public class ChickenRunnerController {
 		public void drawScore(Graphics g) {
 			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			
-			g.setFont(new Font("Monospaced", Font.BOLD, model.getFontSize()));
+			g.setFont(new Font("Monospaced", Font.BOLD, Constants.FONT_SIZE));
 			g.setColor(new Color(0, 176, 80));
-			g.drawString("Score " + model.getScore(), model.getScoreX(), model.getScoreY());
+			g.drawString("Score " + model.getScore(), Constants.SCORE_X, Constants.SCORE_Y);
 		}
 		
 		public void drawApple(Graphics g) {
@@ -172,8 +168,8 @@ public class ChickenRunnerController {
 	}
 	
 	public void moveBackground() {
-		model.getBgPoint1().x -= model.getBgDx();
-		model.getBgPoint2().x -= model.getBgDx();
+		model.getBgPoint1().x -= Constants.BG_DX;
+		model.getBgPoint2().x -= Constants.BG_DX;
 
 		if (model.getBgPoint1().x <= view.getBg1().getWidth(null) * -1) {
 			model.getBgPoint1().x = view.getBg1().getWidth(null);
@@ -187,7 +183,7 @@ public class ChickenRunnerController {
 	public void moveChicken() {
 		if (model.getChicken().isMoveRight()) {
 			//Is the user attempting to move the chicken outside the right boundary?
-			if (model.getChicken().getPoint().x >= model.getFrameWidth() - view.getChickenImage().getWidth(null)) {
+			if (model.getChicken().getPoint().x >= Constants.FRAME_WIDTH - view.getChickenImage().getWidth(null)) {
 				model.getChicken().setMoveRight(false);
 				return;
 			}
@@ -275,7 +271,7 @@ public class ChickenRunnerController {
 		}
 		
 		if (!model.getMissles().isEmpty()) {
-			if (model.getMissles().get(0).getPoint().x > model.getFrameWidth()) {
+			if (model.getMissles().get(0).getPoint().x > Constants.FRAME_WIDTH) {
 				model.getMissles().remove(0);
 			}
 		}
@@ -283,7 +279,7 @@ public class ChickenRunnerController {
 	
 	public void fireMissle() {
 		int x = model.getChicken().getPoint().x + view.getChickenImage().getWidth(null);
-		int y = model.getChicken().getPoint().y + model.getMissleYOffset();
+		int y = model.getChicken().getPoint().y + Constants.MISSLE_Y_OFFSET;
 
 		model.getMissles().add(new Missle(x, y));
 	}

@@ -1,11 +1,6 @@
 import java.awt.Point;
 
 public class Chicken {
-	private final int GRAVITY = 1;
-	private final int START_Y = 300;
-	private final int X_VELOCITY = 4;
-	private final int Y_VELOCITY = 20;
-	
 	private Point location;
 	private boolean moveRight;
 	private boolean moveLeft;
@@ -14,9 +9,9 @@ public class Chicken {
 	private int velX;
 
 	public Chicken() {
-		this.location = new Point(0, START_Y);
-		this.velX = X_VELOCITY;
-		this.velY = Y_VELOCITY;
+		this.location = new Point(0, Constants.CHICKEN_START_Y);
+		this.velX = Constants.CHICKEN_X_VELOCITY;
+		this.velY = Constants.CHICKEN_Y_VELOCITY;
 		this.moveRight = false;
 		this.moveLeft = false;
 		this.moveUp = false;
@@ -59,12 +54,12 @@ public class Chicken {
 	}
 	
 	public void moveUp() {
-		if (this.velY >= -Y_VELOCITY) {
+		if (this.velY >= -Constants.CHICKEN_Y_VELOCITY) {
 			this.location.y -= velY;
-			this.velY -= GRAVITY;
+			this.velY -= Constants.CHICKEN_GRAVITY;
 		} else {
 			this.moveUp = false;
-			this.velY = Y_VELOCITY;
+			this.velY = Constants.CHICKEN_Y_VELOCITY;
 		}
 	}
 }
