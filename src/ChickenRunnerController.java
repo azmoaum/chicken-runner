@@ -48,6 +48,8 @@ public class ChickenRunnerController {
 			g.drawImage(view.getBg1(), model.getBgPoint1().x , model.getBgPoint1().y, view.getBg1().getWidth(null), view.getBg1().getHeight(null), null);
 			g.drawImage(view.getBg2(), model.getBgPoint2().x , model.getBgPoint2().y, view.getBg2().getWidth(null), view.getBg1().getHeight(null), null);
 			
+			drawHealthBar(g);
+			
 			drawApple(g);
 			
 			g.drawImage(view.getCurrChickenImage(), model.getChicken().getPoint().x, model.getChicken().getPoint().y, view.getChickenImage().getWidth(null), view.getChickenImage().getHeight(null), null);
@@ -61,15 +63,25 @@ public class ChickenRunnerController {
 			drawScore(g);
 		}
 
-		public void drawScore(Graphics g) {
+		private void drawHealthBar(Graphics g) {
+			//Draw Red health bar
+			g.setColor(Constants.RED_COLOR);
+			g.fillRect(Constants.HEALTHBAR_X, Constants.HEALTHBAR_Y, Constants.HEALTHBAR_WIDTH, Constants.HEALTHBAR_HEIGHT);
+			
+			//Draw Green health bar over top
+			g.setColor(Constants.GREEN_COLOR);
+			g.fillRect(model.getHealthBar().getX(), Constants.HEALTHBAR_Y, (int) (model.getHealthBar().getHealthPercentage() * Constants.HEALTHBAR_WIDTH), Constants.HEALTHBAR_HEIGHT);
+		}
+		
+		private void drawScore(Graphics g) {
 			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			
 			g.setFont(new Font("Monospaced", Font.BOLD, Constants.FONT_SIZE));
-			g.setColor(new Color(0, 176, 80));
+			g.setColor(Constants.GREEN_COLOR);
 			g.drawString("Score " + model.getScore(), Constants.SCORE_X, Constants.SCORE_Y);
 		}
 		
-		public void drawApple(Graphics g) {
+		private void drawApple(Graphics g) {
 			for (Apple apple: model.getApples()) {
 				((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
 	                    apple.getAlpha()));
@@ -80,7 +92,7 @@ public class ChickenRunnerController {
                    1.0f));
 		}
 		
-		public void drawEnemy(Graphics g) {
+		private void drawEnemy(Graphics g) {
 			for (Enemy enemy: model.getEnemies()) {
 				g.drawImage(view.getEnemyImage(), enemy.getPoint().x , enemy.getPoint().y, view.getEnemyImage().getWidth(null), view.getEnemyImage().getHeight(null), null);
 			}
@@ -96,6 +108,7 @@ public class ChickenRunnerController {
 			moveApple();
 			moveMissle();
 			moveEnemy();
+			checkChickenEnemyCollision();
 			view.repaint();
 		}
 		
@@ -167,7 +180,7 @@ public class ChickenRunnerController {
 		
 	}
 	
-	public void moveBackground() {
+	private void moveBackground() {
 		model.getBgPoint1().x -= Constants.BG_DX;
 		model.getBgPoint2().x -= Constants.BG_DX;
 
@@ -180,7 +193,7 @@ public class ChickenRunnerController {
 		}
 	}
 	
-	public void moveChicken() {
+	private void moveChicken() {
 		if (model.getChicken().isMoveRight()) {
 			//Is the user attempting to move the chicken outside the right boundary?
 			if (model.getChicken().getPoint().x >= Constants.FRAME_WIDTH - view.getChickenImage().getWidth(null)) {
@@ -208,7 +221,7 @@ public class ChickenRunnerController {
 		}
 	}
 	
-	public void moveApple() {
+	private void moveApple() {
 		int index = 0;
 		for (Apple apple: model.getApples()) {
 			apple.moveLeft();
@@ -231,7 +244,7 @@ public class ChickenRunnerController {
 		}
 	}
 	
-	public void checkAppleChickenCollision() {
+	private void checkAppleChickenCollision() {
 		int index = 0;
 		//Not the greatest way to check collisions. But it is a GOOD approximation.
 		for (Apple apple: model.getApples()) {
@@ -251,7 +264,7 @@ public class ChickenRunnerController {
 		}
 	}
 	
-	public void checkMissleEnemyCollision(Enemy enemy, int j) {
+	private void checkMissleEnemyCollision(Enemy enemy, int j) {
 		int i = 0;
 			for (Missle missle: model.getMissles()) {
 				int enemyMissleDistanceX = Math.abs(missle.getPoint().x - enemy.getPoint().x);
@@ -265,7 +278,21 @@ public class ChickenRunnerController {
 			}
 	}
 	
-	public void moveMissle() {
+	private void checkChickenEnemyCollision() {
+		//Not the greatest way to check collisions. But it is a GOOD approximation.
+		for (Enemy enemy: model.getEnemies()) {
+			int enemyChickenDistanceX = Math.abs((model.getChicken().getPoint().x - enemy.getPoint().x));
+			int enemyChickenDistanceY = Math.abs((model.getChicken().getPoint().y - enemy.getPoint().y));
+			int enemyWidth = view.getEnemyImage().getWidth(null);
+			int enemyHeight = view.getEnemyImage().getHeight(null);
+
+			if (enemyChickenDistanceY <= enemyHeight && enemyChickenDistanceX < enemyWidth) {
+				model.getHealthBar().removeHealth();
+			}
+		}	
+}
+	
+	private void moveMissle() {
 		for (Missle missle: model.getMissles()) {
 			missle.moveRight();
 		}
@@ -277,14 +304,14 @@ public class ChickenRunnerController {
 		}
 	}
 	
-	public void fireMissle() {
+	private void fireMissle() {
 		int x = model.getChicken().getPoint().x + view.getChickenImage().getWidth(null);
 		int y = model.getChicken().getPoint().y + Constants.MISSLE_Y_OFFSET;
 
 		model.getMissles().add(new Missle(x, y));
 	}
 	
-	public void moveEnemy() {
+	private void moveEnemy() {
 		int index = 0;
 		for (Enemy enemy: model.getEnemies()) {
 			enemy.moveLeft();

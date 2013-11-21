@@ -10,6 +10,7 @@ public class ChickenRunnerModel {
 	private CopyOnWriteArrayList<Missle> missles;
 	private CopyOnWriteArrayList<Apple> apples;
 	private CopyOnWriteArrayList<Enemy> enemies;
+	private HealthBar healthBar;
 	
 	public ChickenRunnerModel() {
 		this.score = 0;
@@ -22,6 +23,7 @@ public class ChickenRunnerModel {
 		this.apples = new CopyOnWriteArrayList<Apple>();
 		this.missles = new CopyOnWriteArrayList<Missle>();
 		this.enemies = new CopyOnWriteArrayList<Enemy>();
+		this.healthBar = new HealthBar();
 	}
 	
 	public Timer getTimer() {
@@ -79,5 +81,8 @@ public class ChickenRunnerModel {
 	public void addAppleScore() {
 		this.score += Constants.APPLE_SCORE_VALUE;
 	}
-
+	
+	public HealthBar getHealthBar() {
+		return this.healthBar;
+	}
 }
