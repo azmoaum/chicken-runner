@@ -54,9 +54,9 @@ public class ChickenRunnerController {
 			
 			drawApple(g);
 			
-			g.drawImage(view.getCurrChickenImage(), model.getChicken().getLocation().x, model.getChicken().getLocation().y, view.getChickenImage().getWidth(null), view.getChickenImage().getHeight(null), null);
-			
 			drawEnemy(g);
+			
+			g.drawImage(view.getCurrChickenImage(), model.getChicken().getLocation().x, model.getChicken().getLocation().y, view.getChickenImage().getWidth(null), view.getChickenImage().getHeight(null), null);
 			
 			for (Missle missle: model.getMissles()) {
 				g.drawImage(view.getMissleImage(), missle.getLocation().x, missle.getLocation().y, missle.getMissleLength(), missle.getMissleLength(), null);
@@ -291,7 +291,7 @@ public class ChickenRunnerController {
 				int missleWidth = view.getMissleImage().getWidth(null);
 				int enemyHeight = view.getEnemyImage().getHeight(null);
 				
-				if (enemyMissleDistanceX <= missleWidth && enemyMissleDistanceY <= enemyHeight) {
+				if (enemyMissleDistanceX <= missleWidth / 2 && enemyMissleDistanceY <= enemyHeight) {
 					enemy.setHealth(enemy.getHealth() - 1);
 					model.getMissles().remove(i);
 					
@@ -310,9 +310,15 @@ public class ChickenRunnerController {
 			int enemyChickenDistanceY = Math.abs(model.getChicken().getLocation().y - enemy.getLocation().y);
 			int enemyWidth = view.getEnemyImage().getWidth(null);
 			int enemyHeight = view.getEnemyImage().getHeight(null);
-
+			
 			if (enemyChickenDistanceY <= enemyHeight && enemyChickenDistanceX < enemyWidth) {
-				model.getHealthBar().removeHealth();
+				if (model.getChicken().getVelY() < 0) {
+					enemy.setJumpedOn(true);
+				}
+				
+				if (!enemy.isJumpedOn()) {
+					model.getHealthBar().removeHealth();
+				}
 			}
 		}	
 }
@@ -342,6 +348,12 @@ public class ChickenRunnerController {
 			enemy.moveLeft();
 			checkMissleEnemyCollision(enemy, index);
 			
+			if (enemy.isJumpedOn()) {
+				enemy.setLocation(enemy.getX(), enemy.getY() + Constants.ENEMY_JUMPED_ON_DY);
+				if (enemy.getLocation().y > Constants.FRAME_HEIGHT) {
+					model.getEnemies().remove(index);
+				}
+			}
 			index++;
 		}
 		

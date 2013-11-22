@@ -57,4 +57,9 @@ public class Chicken extends Point {
 			this.velY = Constants.CHICKEN_Y_VELOCITY;
 		}
 	}
+
+	public int getVelY() {
+		return velY;
+	}
+	
 }

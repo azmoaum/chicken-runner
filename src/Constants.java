@@ -43,6 +43,7 @@ public final class Constants {
     	public static final int ENEMY_SPAWN_DELAY = 2000;
     	public static final int ENEMY_HEALTH_MAX = 3;
     	public static final int ENEMY_SIZE_FACTOR = 7;
+    	public static final int ENEMY_JUMPED_ON_DY = 7;
     	
     	public static final int HEALTH_MAX = 200;
     	public static final int HEALTHBAR_WIDTH = 200;
