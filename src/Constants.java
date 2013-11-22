@@ -28,7 +28,10 @@ public final class Constants {
     	public static final int APPLE_SCORE_VALUE = 250;
     	public static final int APPLE_X_VELOCITY = 2;
     	public static final int APPLE_START_Y = 125;
+    	public static final int APPLE_START_Y_2 = 175;
     	public static final int APPLE_START_X = 800;
+    	public static final int APPLE_EATEN_DY = 5;
+    	public static final float APPLE_ALPHA_INCREMENT = 0.04f;
     	
     	public static final int MISSLE_X_VELOCITY = 10;
     	public static final int MISSLE_LENGTH = 20;
@@ -38,7 +41,8 @@ public final class Constants {
     	public static final int ENEMY_START_X = 800;
     	public static final int ENEMY_START_Y = 310;
     	public static final int ENEMY_SPAWN_DELAY = 2000;
-    	public static final int ENEMY_HEALTH_MAX = 5;
+    	public static final int ENEMY_HEALTH_MAX = 3;
+    	public static final int ENEMY_SIZE_FACTOR = 7;
     	
     	public static final int HEALTH_MAX = 200;
     	public static final int HEALTHBAR_WIDTH = 200;

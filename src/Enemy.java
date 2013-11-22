@@ -1,20 +1,15 @@
 import java.awt.Point;
 
-public class Enemy {
-	private Point point;
+public class Enemy extends Point{
 	private int health;
 	
 	public Enemy() {
-		this.point = new Point(Constants.ENEMY_START_X, Constants.ENEMY_START_Y);
+		this.setLocation(new Point(Constants.ENEMY_START_X, Constants.ENEMY_START_Y));
 		this.health = Constants.ENEMY_HEALTH_MAX;
 	}
 
-	public Point getPoint() {
-		return point;
-	}
-	
 	public void moveLeft() {
-		this.point.x -= Constants.ENEMY_X_VELOCITY;
+		this.setLocation(this.getX() - Constants.ENEMY_X_VELOCITY, this.getY());
 	}
 
 	public int getHealth() {

@@ -1,21 +1,20 @@
 import java.awt.Point;
+import java.util.Random;
 
-public class Apple {
-	private Point point;
+public class Apple extends Point {
 	private boolean eaten;
 	private float alpha;
-	
 	public Apple() {
 		this.alpha = 1.0f;
-		this.point = new Point(Constants.APPLE_START_X, Constants.APPLE_START_Y);
-	}
-
-	public Point getPoint() {
-		return this.point;
+		int startY = Constants.APPLE_START_Y;
+		if (new Random().nextInt(3) + 1 == 3) {
+			startY = Constants.APPLE_START_Y_2;
+		}
+		this.setLocation(new Point(Constants.APPLE_START_X, startY));
 	}
 
 	public void moveLeft() {
-		this.point.x -= Constants.APPLE_X_VELOCITY;
+		this.setLocation(this.getX() - Constants.APPLE_X_VELOCITY, this.getY());
 	}
 
 	public boolean isEaten() {
