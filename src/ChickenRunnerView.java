@@ -44,6 +44,7 @@ public class ChickenRunnerView extends JFrame {
 		    this.missleImage = ImageIO.read(new File("images/Missle.png"));
 		    this.enemyImage = ImageIO.read(new File("images/Enemy.png"));
 		} catch (IOException e) {
+
 		}
 		
 		this.currChickenImage = this.chickenImage;

@@ -94,8 +94,10 @@ public class ChickenRunnerController {
 		
 		private void drawEnemy(Graphics g) {
 			for (Enemy enemy: model.getEnemies()) {
-				g.drawImage(view.getEnemyImage(), enemy.getPoint().x , enemy.getPoint().y, view.getEnemyImage().getWidth(null), view.getEnemyImage().getHeight(null), null);
+				int shrinkFactor = 5 * (Constants.ENEMY_HEALTH_MAX - enemy.getHealth());
+				g.drawImage(view.getEnemyImage(), enemy.getPoint().x , enemy.getPoint().y + (shrinkFactor / 2), view.getEnemyImage().getWidth(null) - shrinkFactor, view.getEnemyImage().getHeight(null) - shrinkFactor, null);
 			}
+
 		}
 	}
 	
@@ -271,8 +273,12 @@ public class ChickenRunnerController {
 				int enemyMissleDistanceY = Math.abs(missle.getPoint().y - enemy.getPoint().y);
 				
 				if (enemyMissleDistanceX <= 10 && enemyMissleDistanceY <= 50) {
-					model.getEnemies().remove(j);
+					enemy.setHealth(enemy.getHealth() - 1);
 					model.getMissles().remove(i);
+					
+					if (enemy.getHealth() <= 0) {
+						model.getEnemies().remove(j);
+					}
 				}
 				i++;
 			}
