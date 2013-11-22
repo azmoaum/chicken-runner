@@ -16,7 +16,8 @@ public class ChickenRunnerView extends JFrame {
 	private BufferedImage currChickenImage;
 	private BufferedImage appleImage;
 	private BufferedImage missleImage;
-	private BufferedImage enemyImage;
+	private BufferedImage enemyImage, enemyImage2;
+	private BufferedImage currEnemyImage;
 	
 	public ChickenRunnerView() {
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -34,6 +35,7 @@ public class ChickenRunnerView extends JFrame {
 		this.appleImage = null;
 		this.missleImage = null;
 		this.enemyImage = null;
+		this.enemyImage2 = null;
 		try {
 		    this.bg1 = ImageIO.read(new File("images/Background.png"));
 		    this.bg2 = ImageIO.read(new File("images/Background.png"));
@@ -43,11 +45,13 @@ public class ChickenRunnerView extends JFrame {
 		    this.appleImage = ImageIO.read(new File("images/Apple.png"));
 		    this.missleImage = ImageIO.read(new File("images/Missle.png"));
 		    this.enemyImage = ImageIO.read(new File("images/Enemy.png"));
+		    this.enemyImage2 = ImageIO.read(new File("images/Enemy2.png"));
 		} catch (IOException e) {
 
 		}
 		
 		this.currChickenImage = this.chickenImage;
+		this.currEnemyImage = this.enemyImage;
 		
 	}
 
@@ -91,6 +95,22 @@ public class ChickenRunnerView extends JFrame {
 	
 	public Image getEnemyImage() {
 		return this.enemyImage;
+	}
+	
+	public Image getEnemy2Image() {
+		return this.enemyImage2;
+	}
+	
+	public Image getCurrEnemyImage() {
+		return this.currEnemyImage;
+	}
+	
+	public void switchCurrEnemyImage() {
+		if (this.currEnemyImage == this.enemyImage) {
+			this.currEnemyImage = enemyImage2;
+		} else {
+			this.currEnemyImage = this.enemyImage;
+		}
 	}
 	
 	public void addPanel(JPanel p) {

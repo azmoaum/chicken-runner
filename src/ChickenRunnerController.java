@@ -71,12 +71,23 @@ public class ChickenRunnerController {
 			//Draw Green health bar over top
 			g.setColor(Constants.GREEN_COLOR);
 			g.fillRect(model.getHealthBar().getX(), Constants.HEALTHBAR_Y, (int) (model.getHealthBar().getHealthPercentage() * Constants.HEALTHBAR_WIDTH), Constants.HEALTHBAR_HEIGHT);
+			
+			g.setFont(new Font("Monospaced", Font.BOLD, Constants.HEALTHBAR_FONT_SIZE));
+			
+			int healthPercentage = (int)(model.getHealthBar().getHealthPercentage() * 100);
+			if (healthPercentage < 50) {
+				g.setColor(Constants.RED_COLOR);
+			}
+			
+			String str = healthPercentage + "%";
+			int strLength = g.getFontMetrics().stringWidth(str);
+			g.drawString(str, Constants.HEALTHBAR_PERCENT_X - strLength, Constants.HEALTHBAR_PERCENT_Y);
 		}
 		
 		private void drawScore(Graphics g) {
 			((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			
-			g.setFont(new Font("Monospaced", Font.BOLD, Constants.FONT_SIZE));
+			g.setFont(new Font("Monospaced", Font.BOLD, Constants.SCORE_FONT_SIZE));
 			g.setColor(Constants.GREEN_COLOR);
 			g.drawString("Score " + model.getScore(), Constants.SCORE_X, Constants.SCORE_Y);
 		}
@@ -94,8 +105,8 @@ public class ChickenRunnerController {
 		
 		private void drawEnemy(Graphics g) {
 			for (Enemy enemy: model.getEnemies()) {
-				int shrinkFactor = 5 * (Constants.ENEMY_HEALTH_MAX - enemy.getHealth());
-				g.drawImage(view.getEnemyImage(), enemy.getPoint().x , enemy.getPoint().y + (shrinkFactor / 2), view.getEnemyImage().getWidth(null) - shrinkFactor, view.getEnemyImage().getHeight(null) - shrinkFactor, null);
+				int shrinkFactor = 7 * (Constants.ENEMY_HEALTH_MAX - enemy.getHealth());
+				g.drawImage(view.getCurrEnemyImage(), enemy.getPoint().x , enemy.getPoint().y + (shrinkFactor), view.getEnemyImage().getWidth(null) - shrinkFactor, view.getEnemyImage().getHeight(null) - shrinkFactor, null);
 			}
 
 		}
@@ -203,7 +214,9 @@ public class ChickenRunnerController {
 				return;
 			}
 			
-			view.switchCurrChickenImage();
+			if (model.getChicken().getPoint().x % 3 == 0) {
+				view.switchCurrChickenImage();
+			}
 			
 			model.getChicken().moveRight();
 		} else if (model.getChicken().isMoveLeft()) {
@@ -213,7 +226,9 @@ public class ChickenRunnerController {
 				return;
 			}
 			
-			view.switchCurrChickenImage();
+			if (model.getChicken().getPoint().x % 3 == 0) {
+				view.switchCurrChickenImage();
+			}
 			
 			model.getChicken().moveLeft();
 		}
@@ -322,10 +337,15 @@ public class ChickenRunnerController {
 		for (Enemy enemy: model.getEnemies()) {
 			enemy.moveLeft();
 			checkMissleEnemyCollision(enemy, index);
+			
 			index++;
 		}
 		
 		if (!model.getEnemies().isEmpty()) {
+			if (model.getEnemies().get(0).getPoint().x % 20 == 0) {
+				view.switchCurrEnemyImage();
+			}
+			
 			if (model.getEnemies().get(0).getPoint().x < -1 * view.getEnemyImage().getWidth(null)) {
 				model.getEnemies().remove(0);
 			}

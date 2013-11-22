@@ -9,7 +9,7 @@ public final class Constants {
     	
     	public static final int FRAME_WIDTH = 800;
     	public static final int FRAME_HEIGHT = 400;
-    	public static final int FONT_SIZE = 24;
+    	public static final int SCORE_FONT_SIZE = 24;
     	
     	public static final int BG_DX = 2;
     	
@@ -45,4 +45,7 @@ public final class Constants {
     	public static final int HEALTHBAR_HEIGHT = 25;
     	public static final int HEALTHBAR_X = FRAME_WIDTH - HEALTHBAR_WIDTH - 10;
     	public static final int HEALTHBAR_Y = 10;
+    	public static final int HEALTHBAR_FONT_SIZE = 18;
+    	public static final int HEALTHBAR_PERCENT_X = Constants.HEALTHBAR_X - 5;
+    	public static final int HEALTHBAR_PERCENT_Y = Constants.HEALTHBAR_Y + 20;
 }
